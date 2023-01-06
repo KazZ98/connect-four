@@ -29,7 +29,7 @@ class Board
     @board[row][column] << player
   end
 
-  def four?(player)
+  def column?(player)
     count = 0
 
     7.times do |column|
@@ -43,4 +43,47 @@ class Board
       end
     end
   end
+
+  def row?(player)
+    count = 0
+
+    board.each do |row|
+      row.each do |column|
+        if count > 0 && column.empty?
+          return false
+        end
+
+        if column.any?(player)
+          count += 1
+        end
+
+        return true if count >= 4
+      end
+
+      count = 0
+    end
+
+    return false
+  end
+
+  def diagonal?(player)
+  end
+
+  def recursive_diagonal(player, position = [0, 0], count = 0)
+    return if count > 0 && position.empty?
+    return if count >= 4
+
+    row, column = position
+
+    if board[row][column].any?(player)
+      count += 1
+      recursive_diagonal(player, [row + 1, column + 1], count)
+      recursive_diagonal(player, [row + 1, column - 1], count)
+    end
+
+    if board[row][column].empty?
+      recursive_diagonal(player, [row, column + 1], count = 0)
+    end
+
+
 end

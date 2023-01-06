@@ -36,7 +36,7 @@ describe Board do
     end
   end
 
-  describe '#four?' do
+  describe '#column?' do
     context 'when is one element in a the same index of each board array(column) 4 times' do
       subject(:game_four_column) { described_class.new }
 
@@ -44,21 +44,69 @@ describe Board do
         player = 'x'
 
         4.times do |n|
-          game_four_column.update_board(player, [n, 0])
+          position = [n, 0]
+          game_four_column.update_board(player, position)
         end
 
-        expect(game_four_column.four?(player)).to be_truthy
+        expect(game_four_column.column?(player)).to be_truthy
       end
     end
 
     context 'when is one element in a the same index of each board array(column) less than 4 times' do
-      subject(:game_one_column) { described_class.new }
+      subject(:game_not_column) { described_class.new }
 
       it 'returns false' do
         player = 'x'
-        game_one_column.update_board(player, [0, 0])
+        position = [0, 0]
+        game_not_column.update_board(player, position)
 
-        expect(game_one_column.four?(player)).to be_falsy
+        expect(game_not_column.column?(player)).to be_falsy
+      end
+    end
+  end
+
+  describe '#row?' do
+    context 'when is one element in each index of one board array(row) 4 times' do
+      subject(:game_four_row) { described_class.new }
+
+      it 'returns true' do
+        player = 'x'
+
+        4.times do |n|
+          position = [1, n]
+          game_four_row.update_board(player, position)
+        end
+
+        expect(game_four_row.row?(player)).to be_truthy
+      end
+    end
+
+    context 'when is one element in each index of one board array(row) less than 4 times' do
+      subject(:game_not_row) { described_class.new }
+
+      it 'returns false' do
+        player = 'x'
+        position = [0, 0]
+        #game_not_row.update_board(player, position)
+
+        expect(game_not_row.row?(player)).to be_falsy
+      end
+    end
+  end
+
+  describe '#diagonal?' do
+    context 'when is one element in each board array(row) in the next or previus continuous index(diagonal) 4 times' do
+      subject(:game_four_diagonal) { described_class.new }
+
+      it 'returns true' do
+        player = 'x'
+
+        4.times do |n|
+          position = [n, n]
+          game_four_diagonal.update_board(player, position)
+        end
+
+        expect(game_four_diagonal.diagonal?(player)).to be_truthy
       end
     end
   end
